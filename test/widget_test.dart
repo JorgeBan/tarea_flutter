@@ -8,12 +8,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:tarea3/main.dart';
-
+import 'package:tarea3/suma_widget.dart' show Suma;
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp());
+    await tester.pumpWidget(Suma());
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

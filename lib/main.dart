@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tarea3/suma_widget.dart';
+import 'package:tarea3/UI/Pages/Login/login_page.dart';
+
 void main() {
-  runApp(Suma());
+  runApp(LoginPage());
 }
+
+
 
