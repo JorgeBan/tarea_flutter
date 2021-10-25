@@ -12,6 +12,14 @@ class FreeText extends StatefulWidget{
 }
 
 class _FreeTextState extends State<FreeText>{
+    final textController = TextEditingController();
+
+
+  @override
+  void dispose() {
+    textController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     
@@ -19,9 +27,10 @@ class _FreeTextState extends State<FreeText>{
       child: Padding(
                 padding: EdgeInsets.all(10.0),
                 child: TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: widget.title,
+                  controller: textController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: widget.title,
                   ),
                 ),
               ),
