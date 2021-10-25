@@ -37,13 +37,11 @@ class DB{
     return database.update("usuario",usuario.toMap(), where: 'id = ?', whereArgs: [usuario.correo]);
   }
 
-  static Future<int> getLogin(String correo, String contrasena) async {
+  static Future<List<Map<String, Object?>>> getLogin(String correo, String contrasena) async {
     Database database = await _openDB();
-    var res = await database.rawQuery("SELECT * FROM Usuario WHERE correo = '$correo' and password = '$contrasena'");
-    
-    if (res.length > 0) {
-      return 1;
-    }
-    return 0;
+    var res = await database.rawQuery("SELECT * FROM Usuario WHERE correo = '$correo' and pass = '$contrasena'");
+    print("usuario: ");
+    print(res);
+    return res;
   }
 }

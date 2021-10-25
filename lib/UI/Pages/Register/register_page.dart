@@ -6,6 +6,8 @@ import 'package:tarea3/Data/Repositories/Register/SqliteRegisterRepository.dart'
 import 'package:tarea3/Domain/Entities/Usuario.dart';
 import 'package:tarea3/UI/Pages/Login/login_page.dart';
 
+import '../Sumar/suma_widget.dart';
+
 //import '../../../suma_widget.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -35,6 +37,9 @@ class PageRegisterState extends State<PageRegister> {
 
   String mensaje = "";
   SqliteRegisterRepository registerRepository = new SqliteRegisterRepository();
+
+  String dropdownValue = "Masculino";
+
   @override
   void dispose() {
     nombreController.dispose();
@@ -103,11 +108,32 @@ class PageRegisterState extends State<PageRegister> {
                         ),
                         Padding(
                           padding: EdgeInsets.all(10.0),
-                          child: TextField(
-                            controller: generoController,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: "Genero",
+                          child: Container(
+                            width: 300,
+                            child: DropdownButton<String>(
+                              value: dropdownValue,
+                              icon: const Icon(Icons.arrow_downward),
+                              iconSize: 20,
+                              elevation: 16,
+                              style: const TextStyle(color: Colors.blue),
+                              underline: Container(
+                                height: 2,
+                                color: Colors.blueAccent,
+                              ),
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  dropdownValue = newValue!;
+                                });
+                              },
+                              items: <String>[
+                                'Masculino',
+                                'Femenino'
+                              ].map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
                             ),
                           ),
                         ),
@@ -148,43 +174,75 @@ class PageRegisterState extends State<PageRegister> {
                             primary: Colors.white,
                             textStyle: const TextStyle(fontSize: 20),
                           ),
-                          onPressed: () async{
-                              mensaje = "";
-                              int validar = _validarCampos();
-                              setState(() {
-                                if(validar == 100){
-                                  mensaje = "Debe llenar todos los campos";
-                                }else if(validar == 200){
-                                  mensaje = "Telefono no valido";
-                                }else if(validar == 300){
-                                  mensaje = "Las contraseñas no coinciden";
-                                }else if(validar == 400){
-                                  mensaje = "ingrese un email valido";
-                                }
-                              });
-
-                              if(validar == 0){
-                                Usuario usuario = new Usuario(
-                                    id: Random().nextInt(5000),
-                                    nombre: nombreController.text,
-                                    correo: correoController.text,
-                                    telefono: int.parse(
-                                    telefonoController.text.toString()),
-                                    direccion: direccionController.text,
-                                    genero: generoController.text,
-                                    pass: passController.text
-                                );
-
-                                var id =
-                                    await registerRepository.registro(usuario);
-                                if (id > 0) {
-                                  print("registro exitoso: $id");
-                                } else {
-                                  print("error");
-                                }
+                          onPressed: () async {
+                            mensaje = "";
+                            int validar = _validarCampos();
+                            setState(() {
+                              if (validar == 100) {
+                                mensaje = "Debe llenar todos los campos";
+                              } else if (validar == 200) {
+                                mensaje = "Telefono no valido";
+                              } else if (validar == 300) {
+                                mensaje = "Las contraseñas no coinciden";
+                              } else if (validar == 400) {
+                                mensaje = "ingrese un email valido";
                               }
-                              
-                            
+                            });
+
+                            if (validar == 0) {
+                              Usuario usuario = new Usuario(
+                                  id: Random().nextInt(5000),
+                                  nombre: nombreController.text,
+                                  correo: correoController.text,
+                                  telefono: int.parse(
+                                      telefonoController.text.toString()),
+                                  direccion: direccionController.text,
+                                  genero: dropdownValue,
+                                  pass: passController.text);
+
+                              var id =
+                                  await registerRepository.registro(usuario);
+                              if (id > 0) {
+                                final snackBar = SnackBar(
+                                  content: Text("Registro exitoso"),
+                                  action: SnackBarAction(
+                                    label: "Ok",
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => Suma()));
+                                    },
+                                  ),
+                                );
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
+                                print("registro exitoso: $id");
+                              } else {
+                                var snackBar;
+
+                                if (id == -1) {
+                                  snackBar = SnackBar(
+                                    content: Text("Correo ya registrado"),
+                                    action: SnackBarAction(
+                                      label: "Ok",
+                                      onPressed: () {},
+                                    ),
+                                  );
+                                } else {
+                                  snackBar = SnackBar(
+                                    content: Text("Ups hubo un error"),
+                                    action: SnackBarAction(
+                                      label: "Ok",
+                                      onPressed: () {},
+                                    ),
+                                  );
+                                }
+
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
+                              }
+                            }
                           },
                           child: Text("Registrar"),
                         ),
@@ -223,14 +281,12 @@ class PageRegisterState extends State<PageRegister> {
         correoController.text.toString().isEmpty ||
         telefonoController.text.toString().isEmpty ||
         direccionController.text.toString().isEmpty ||
-        generoController.text.toString().isEmpty ||
         passController.text.toString().isEmpty ||
         passConfController.text.toString().isEmpty) {
-            return 100;
+      return 100;
     }
 
     if (int.tryParse(telefonoController.text) == null) {
-      
       return 200;
     }
 
