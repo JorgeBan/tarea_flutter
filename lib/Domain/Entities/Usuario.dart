@@ -5,8 +5,9 @@ class Usuario{
   int telefono;
   String direccion;
   String genero;
-
-  Usuario({required this.id, required this.nombre, required this.correo, required this.telefono, required this.direccion, required this.genero});
+  String pass;
+  
+  Usuario({required this.id, required this.nombre, required this.correo, required this.telefono, required this.direccion, required this.genero, required this.pass});
 
   Map<String, dynamic> toMap(){
     return{
@@ -15,7 +16,8 @@ class Usuario{
       'correo': correo,
       'telefono' : telefono,
       'direccion': direccion,
-      'genero': genero
+      'genero': genero,
+      'pass': pass
     };
   } 
 }

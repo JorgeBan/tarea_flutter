@@ -10,7 +10,7 @@ class DB{
    return openDatabase(join(await getDatabasesPath(), 'usuaios.db'),
        onCreate: (db, version) {
      return db.execute(
-       "CREATE TABLE usuario (id INTEGER PRIMARY KEY, nombre TEXT, correo TEXT, telefono INTEGER, direccion TEXT, genero TEXT)",
+       "CREATE TABLE usuario (id INTEGER PRIMARY KEY, nombre TEXT, correo TEXT, telefono INTEGER, direccion TEXT, genero TEXT, pass TEXT)",
      );
    }, version: 1);
  }
@@ -18,20 +18,23 @@ class DB{
 
  static Future<int> insert(Usuario usuario) async {
     Database database = await _openDB();
-
+    var usuario2 =await  database.rawQuery("select * from usuario where correo = ? ",[usuario.correo] );
+    if(usuario2.length > 0){
+      return -1;
+    }
     return database.insert("usuario", usuario.toMap());
   }
 
   static Future<int> delete(Usuario usuario) async {
     Database database = await _openDB();
 
-    return database.delete("usuario", where: 'id = ?', whereArgs: [usuario.id]);
+    return database.delete("usuario", where: 'id = ?', whereArgs: [usuario.correo]);
   }
 
   static Future<int> update(Usuario usuario) async {
     Database database = await _openDB();
 
-    return database.update("usuario",usuario.toMap(), where: 'id = ?', whereArgs: [usuario.id]);
+    return database.update("usuario",usuario.toMap(), where: 'id = ?', whereArgs: [usuario.correo]);
   }
 
   static Future<int> getLogin(String correo, String contrasena) async {
