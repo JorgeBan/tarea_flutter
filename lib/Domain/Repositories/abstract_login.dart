@@ -1,4 +1,10 @@
+import 'package:tarea3/Domain/Entities/Usuario.dart';
+
 abstract class AbstractLogin{
 
-  Future<List<Map<String, Object?>>> login(String correo, String pass);
+  Future<Usuario> login(String correo, String pass);
+
+  Future<void> doLogout();
 }
+
+

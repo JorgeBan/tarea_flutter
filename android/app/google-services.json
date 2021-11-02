@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "883030344551",
+    "project_id": "flutter-app-c057d",
+    "storage_bucket": "flutter-app-c057d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:883030344551:android:5a041a3805a4d48ccb25c2",
+        "android_client_info": {
+          "package_name": "com.example.tarea3"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "883030344551-6tq9a9ehcm527jrut2p0pe3rp0han3v4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tarea3",
+            "certificate_hash": "a6ca7bd52c83c8988407fd08917d90aefb02cc48"
+          }
+        },
+        {
+          "client_id": "883030344551-g1p4rah7mkrtc302ao6h239jrk914ktm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFsVh4k-kszJkRS7KACkXRVDZW2XgzyuY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "883030344551-g1p4rah7mkrtc302ao6h239jrk914ktm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

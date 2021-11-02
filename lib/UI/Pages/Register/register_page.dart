@@ -1,12 +1,11 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tarea3/Data/Repositories/Authentication/FirebaseAuthtenticationRepository.dart';
 import 'package:tarea3/Data/Repositories/Register/SqliteRegisterRepository.dart';
 import 'package:tarea3/Domain/Entities/Usuario.dart';
 import 'package:tarea3/UI/Pages/Login/login_page.dart';
+import 'package:tarea3/UI/Routes/routes.dart';
 
-import '../Sumar/suma_widget.dart';
 
 //import '../../../suma_widget.dart';
 
@@ -191,7 +190,6 @@ class PageRegisterState extends State<PageRegister> {
 
                             if (validar == 0) {
                               Usuario usuario = new Usuario(
-                                  id: Random().nextInt(5000),
                                   nombre: nombreController.text,
                                   correo: correoController.text,
                                   telefono: int.parse(
@@ -200,50 +198,32 @@ class PageRegisterState extends State<PageRegister> {
                                   genero: dropdownValue,
                                   pass: passController.text);
 
-                              var id =
-                                  await registerRepository.registro(usuario);
-                              if (id > 0) {
-                                final snackBar = SnackBar(
-                                  content: Text("Registro exitoso"),
-                                  action: SnackBarAction(
-                                    label: "Ok",
-                                    onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => Suma()));
-                                    },
-                                  ),
-                                );
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBar);
-                                print("registro exitoso: $id");
-                              } else {
-                                var snackBar;
+                              var authUser = new FirebaseAuthenticationRepository();
 
-                                if (id == -1) {
-                                  snackBar = SnackBar(
-                                    content: Text("Correo ya registrado"),
-                                    action: SnackBarAction(
-                                      label: "Ok",
-                                      onPressed: () {},
+                              authUser.register(usuario).
+                              then((value) {
+                                Navigator.pushNamed(context, Routes.HOME);
+                                print("registro exitoso");
+                              })
+                              .catchError((e){
+                                
+                                showDialog<String>(
+                                    context: context,
+                                    builder: (BuildContext context) => AlertDialog(
+                                      title: const Text('Error al registrar'),
+                                      content: Text(e.toString()),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () => Navigator.pop(context),
+                                          child: const Text('OK'),
+                                        ),
+                                      ],
                                     ),
                                   );
-                                } else {
-                                  snackBar = SnackBar(
-                                    content: Text("Ups hubo un error"),
-                                    action: SnackBarAction(
-                                      label: "Ok",
-                                      onPressed: () {},
-                                    ),
-                                  );
-                                }
-
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBar);
-                              }
-                            }
-                          },
+                                print(e.toString());
+                              });
+                          }
+                        },
                           child: Text("Registrar"),
                         ),
                       ),
@@ -257,10 +237,7 @@ class PageRegisterState extends State<PageRegister> {
                             textStyle: const TextStyle(fontSize: 20),
                           ),
                           onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => LoginPage()));
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context)=> LoginPage()));
                           },
                           child: Text("Iniciar"),
                         ),
